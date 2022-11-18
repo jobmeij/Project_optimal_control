@@ -1,0 +1,154 @@
+\documentclass[a4paper]{article}
+
+
+% Title Page
+
+
+\usepackage{url}
+\usepackage{amsmath}%
+\usepackage{amsfonts}%
+\usepackage{amssymb}%
+\usepackage{mathtools}
+\usepackage{bm}%
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{cite}
+\usepackage{sidecap}
+\usepackage{fullpage}
+\usepackage{geometry}
+\newcounter{mytempeqncnt}
+\usepackage[T1]{fontenc}                
+
+
+\newcounter{thcounter}
+\newcounter{ascounter}
+\newcounter{thcountera}
+\newcounter{ascountera}
+\newcounter{thcounterb}
+\newcounter{ascounterb}
+
+%\newenvironment{example}[1][Example]{\textbf{#1} }{ $\square$}
+
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+
+\newenvironment{exercise}{
+	\bigskip\noindent
+	\refstepcounter{thcounter}
+	\textbf{Problem \thethcounter}
+}
+
+\newenvironment{addexercise}{
+	\bigskip\noindent
+	\textbf{Additional problem}}
+
+\newenvironment{assignment}{
+	\bigskip\noindent
+	\refstepcounter{ascounter}
+	\textbf{Matlab assignment 1}
+}
+
+
+\font\myfont=cmr12 at 33pt
+
+
+\title{Homework assignment 1}
+\date{Lecturer: Duarte Antunes}
+\author{Optimal control and dynamic programming (4SC000), TU/e, 2016-2017}
+\begin{document}
+	%\maketitle
+	\noindent	\hrulefill
+		
+\textbf{Answer sheet homework 1}, 4SC000, TU/e, 2018-2019
+	\begin{flushright}
+		Answer to problem 3 (1/3)\footnote{You can print, write down your answers and scan or you can create a similar pdf document with the same number of pages in word or latex with your answers.}
+	\end{flushright}
+	\noindent	\hrulefill
+
+%\vspace{1cm}
+
+
+\begin{table}[h]
+\begin{tabular}{|l|l|lll}
+\cline{1-2}
+\textbf{Group 2} 	&						  &  &  &  \\ \cline{1-2}
+\textbf{Student}    & \textbf{Student number} &  &  &  \\ \cline{1-2}
+Bob Clephas         & 1271431                 &  &  &  \\ \cline{1-2}
+Tom van de Laar    & 1265938                 &  &  &  \\ \cline{1-2}
+Job Meijer          & 1268155                 &  &  &  \\ \cline{1-2}
+Marcel van Wensveen & 1253085                 &  &  &  \\ \cline{1-2}
+\end{tabular}
+\end{table}
+
+%\vspace{1cm}
+In this document two different path planning algorithms are evaluated. Those algorithms (Dijkstra and A*) determine the ideal path given a map split in nodes, a starting point and a goal. In this document we will prove that we can use the Dijkstra algorithm to obtain the same result as when we use the A*, although the two algorithms have different input arguments. Both algorithms iterate over an list of $OPEN$ nodes and decide every iteration which node they will evaluate during that iteration. The difference between the two algorithms is the equation to decide which node will be evaluated. In this document we will first explain both algorithms and secondly prove that we can use the Dijkstra algorithm with adjusted inputs to obtain the same path as when we use A*.
+\\
+
+The initial conditions for both the Dijkstra and the A* algorithm are equal to
+
+\begin{equation}
+d_i = \infty for\ i \in \mathcal{V} -  \{p\},d_p = 0,\ and\  OPEN = \{p\}, \ where \ p \ is \ the \ initial \ node
+\end{equation}
+
+In the Dijkstra algorithm the next node $i$ that will be evaluated is the node with the minimum estimate $d_i$ in the $OPEN$ list. 
+For this node all the possible transitions to surrounding nodes are evaluated in terms of the cost $w_{ij}$ to reach that node from node $i$. If $d_i + w_{ij} < d_j$ where $d_j$ is the iterated cost to reach node $j$, the cost $d_j$ will be updated and the transition is stored in $\beta(j) = i$.
+\\
+
+For the A* algorithm the next node that will be opened is the node $i$ that has the minimal cost of $d_i + h(i)$ in the $OPEN$ list, where $d_i$ is the cost to reach the node and $h(i)$ is the estimated cost from node $i$ to the final node $t$. For the chosen node all the possible transitions to the surrounding nodes are evaluated in the same way as in the Dijkstra algorithm and the  way to store possible transitions with lower costs are also the same as in the Dijkstra algorithm.
+\\
+
+
+\newpage
+\thispagestyle{empty}
+\noindent	\hrulefill
+\begin{flushright}
+			Answer to problem 3 (2/3)
+\end{flushright}
+\noindent	\hrulefill
+\vspace{1cm}
+
+The goal is to proof that the Dijkstra and A* algorithms output the same optimal path and $OPEN$ list in the situation that specific (adjusted) weights are used in the Dijkstra algorithm and the weights of A* are the original weights.
+Because the way of calculating the transition costs and the way of storing the best transitions are equal in both algorithms it is sufficient to proof that the criteria to decide which node has to be opened are equal in both algorithms.
+The specific weights for the Dijkstra algorithm are noted as $\bar{w}_{ij}$ and are equal to $w_{ij} + h(j) - h(i)$ where $h(i)$ and $h(j)$ are the estimated costs from node $i$ and $j$ respectively to the final node. 
+\\
+
+If the next node that is evaluated is equal in both algorithm, the node with the lowest cost must be the same for both algorithms. The cost of node $k$ is expressed as $d(k)$.
+\\
+
+In the case of the changed Dijkstra algorithm the cost is equal to the sum of the previous (adjusted) costs $\bar{d}(k)$ to reach that node. For a node reached by a path expressed by $\{p, ... ,k\}$ this is equal to 
+
+\begin{align}
+\begin{split}
+\bar{d}(k) = &\ \sum_{i=p}^{k-1}( \bar{w}_{ik}) \\
+= &\ \sum_{i=p}^{k-1}(w_{ij} + h(j) - h(i)) \\
+= &\ w_{p1} + h(1) - h(p) + w_{12} + h(2) - h(1) + ... + w_{k-1 k} + h(k) - h(k-1) \\
+= &\ w_{p1} + w_{12} + ... + w_{k-1 k} - h(p) + h(k)\\
+=&\ \sum_{i=p}^{k-1}(w_{ik}) - h(p) + h(k)\\
+\end{split}
+\end{align}
+\begin{equation} \label{eq1}
+= d(k) - h(p) + h(k)
+\end{equation} 	
+
+The term of $h(p)$ in (\ref{eq1}) is present in every node, is constant and thus has no effect on the decision which node has the lowest cost. The decision of which node had the minimum cost can therefore be simplified to
+\begin{equation} \label{eq2}
+d(k) + h(k)
+\end{equation} 	   
+
+For the A* algorithm the cost is equal to the actual cost $d(k)$ plus the estimated cost to the goal $h(k)$. For a path from node $p$ to $k$ this is by definition equal to 
+
+\begin{equation} \label{eq3}
+\ d(k) + h(k)
+\end{equation}
+
+From (\ref{eq2}) and (\ref{eq3}) it is easily seen that for both algorithms the same equation is used to determine which node has the minimum cost and thus which node is evaluated. Therefore both algorithms open the same node each iteration and produce the same $OPEN$ list and thus the same optimal path.
+
+\newpage
+\thispagestyle{empty}
+\noindent	\hrulefill
+\begin{flushright}
+			Answer to problem 3 (3/3)
+\end{flushright}
+\noindent	\hrulefill
+\end{document}
