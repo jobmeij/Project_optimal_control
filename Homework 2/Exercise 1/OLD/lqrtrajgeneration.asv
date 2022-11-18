@@ -1,9 +1,0 @@
-function [xix,xiy,xiz] = lqrtrajgeneration(P,T,X0,rho,tau1,N12)
-    h = floor(T(1,length(T))/tau1);
-    tau2 = tau1/N12;
-    
-    
-    
-
-end
-
